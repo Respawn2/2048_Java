@@ -28,8 +28,8 @@ public class GameState {
     public void reset() {
         grid = new int[16];
         score = 0;
-        difficulty = 1;
-        targetValue = (int) Math.pow(2, 3 + difficulty); // 8 для уровня 1
+        //difficulty = 1;
+        //targetValue = (int) Math.pow(2, 3 + difficulty);
         gameOver = false;
         win = false;
         addNewTile();
