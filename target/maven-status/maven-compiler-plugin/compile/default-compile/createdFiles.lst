@@ -1,0 +1,11 @@
+com/example/game/GameController$MoveRequest.class
+com/example/game/Tile.class
+com/example/game/MoveStrategy.class
+com/example/game/GameState.class
+com/example/config/WebConfig.class
+com/example/game/MoveStrategy$Direction.class
+com/example/game/GameController.class
+com/example/Application.class
+com/example/game/GameController$GameResponse.class
+com/example/game/GameController$DifficultyRequest.class
+com/example/game/Game2048.class

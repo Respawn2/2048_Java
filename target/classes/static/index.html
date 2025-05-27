@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Игра 2048</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Меню выбора сложности -->
+<div id="difficulty-menu" class="menu-container">
+    <h1>2048</h1>
+    <div class="menu">
+        <h2>Выберите уровень сложности</h2>
+        <div class="difficulty-levels">
+            <button data-level="1" class="difficulty-btn">1 (Цель: 16)</button>
+            <button data-level="2" class="difficulty-btn">2 (Цель: 32)</button>
+            <button data-level="3" class="difficulty-btn">3 (Цель: 64)</button>
+            <button data-level="4" class="difficulty-btn">4 (Цель: 128)</button>
+            <button data-level="5" class="difficulty-btn">5 (Цель: 256)</button>
+            <button data-level="6" class="difficulty-btn">6 (Цель: 512)</button>
+            <button data-level="7" class="difficulty-btn">7 (Цель: 1024)</button>
+            <button data-level="8" class="difficulty-btn">8 (Цель: 2048)</button>
+            <button data-level="9" class="difficulty-btn">9 (Цель: 4096)</button>
+            <button data-level="10" class="difficulty-btn">10 (Цель: 8192)</button>
+        </div>
+    </div>
+</div>
+
+<!-- Игровой интерфейс -->
+<div id="game-container" class="container" style="display: none;">
+    <h1>2048</h1>
+    <div class="score-container">
+        <span>Счёт: </span>
+        <span id="score">0</span>
+    </div>
+    <div class="grid-container">
+        <div class="grid"></div>
+    </div>
+    <button id="new-game">Новая игра</button>
+</div>
+
+<script>
+    class Game2048Client {
+        constructor() {
+            this.gridElement = document.querySelector('.grid');
+            this.scoreElement = document.getElementById('score');
+            this.gameContainer = document.getElementById('game-container');
+            this.difficultyMenu = document.getElementById('difficulty-menu');
+            this.isGameEnded = false;
+            this.createGridCells();
+            this.setupEventListeners();
+        }
+
+        createGridCells() {
+            this.gridElement.innerHTML = '';
+            for (let i = 0; i < 16; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'tile';
+                this.gridElement.appendChild(cell);
+            }
+            this.cells = Array.from(this.gridElement.children);
+        }
+
+        setupEventListeners() {
+            document.querySelectorAll('.difficulty-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    this.isGameEnded = false;
+                    const level = parseInt(btn.dataset.level);
+                    fetch('/api/difficulty', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ level })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Difficulty set:', data);
+                        this.difficultyMenu.style.display = 'none';
+                        this.gameContainer.style.display = 'block';
+                        this.updateDisplay(data);
+                        this.checkGameStatus(data);
+                    })
+                    .catch(error => console.error('Error setting difficulty:', error));
+                });
+            });
+
+            document.getElementById('new-game').addEventListener('click', () => {
+                this.isGameEnded = false;
+                fetch('/api/reset', { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Game reset:', data);
+                        this.difficultyMenu.style.display = 'block';
+                        this.gameContainer.style.display = 'none';
+                        this.updateDisplay(data);
+                    })
+                    .catch(error => console.error('Error resetting game:', error));
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key) && !this.isGameEnded) {
+                    e.preventDefault();
+                    this.handleKeyPress(e.key);
+                }
+            });
+        }
+
+        handleKeyPress(direction) {
+            fetch('/api/move', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ direction })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Move response:', data);
+                this.updateDisplay(data);
+                this.checkGameStatus(data);
+            })
+            .catch(error => console.error('Error processing move:', error));
+        }
+
+        updateDisplay(data) {
+            data.grid.forEach((value, index) => {
+                const cell = this.cells[index];
+                cell.textContent = value || '';
+                cell.className = 'tile';
+                if (value > 0) {
+                    cell.classList.add(`tile-${value}`);
+                }
+            });
+            this.scoreElement.textContent = data.score;
+        }
+
+        checkGameStatus(data) {
+            if (this.isGameEnded) {
+                console.log('Game already ended, skipping status check');
+                return;
+            }
+
+            if (data.win) {
+                this.isGameEnded = true;
+                console.log('Win detected, showing alert');
+                setTimeout(() => {
+                    alert(`Вы выиграли! Счёт: ${data.score}`);
+                    this.difficultyMenu.style.display = 'block';
+                    this.gameContainer.style.display = 'none';
+                    this.isGameEnded = false; // Сбрасываем для новой игры
+                }, 100);
+            } else if (data.gameOver) {
+                this.isGameEnded = true;
+                console.log('Game over detected, showing alert');
+                setTimeout(() => {
+                    alert(`Игра окончена! Ваш счёт: ${data.score}`);
+                    this.difficultyMenu.style.display = 'block';
+                    this.gameContainer.style.display = 'none';
+                    this.isGameEnded = false; // Сбрасываем для новой игры
+                }, 100);
+            }
+        }
+    }
+
+    new Game2048Client();
+</script>
+</body>
+</html>

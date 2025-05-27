@@ -1,0 +1,133 @@
+/* Общие стили */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #faf8ef;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Стили для меню выбора сложности */
+.menu-container {
+    text-align: center;
+    background: #faf8ef;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.menu {
+    background: #bbada0;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px auto;
+    max-width: 500px;
+}
+
+.menu h2 {
+    color: #776e65;
+    margin-bottom: 20px;
+}
+
+.difficulty-levels {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.difficulty-btn {
+    background: #8f7a66;
+    color: #f9f6f2;
+    border: none;
+    padding: 15px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.difficulty-btn:hover {
+    background: #9f8b77;
+}
+
+/* Остальные стили (из вашего CSS) */
+.container {
+    text-align: center;
+}
+
+h1 {
+    color: #776e65;
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.score-container {
+    font-size: 24px;
+    color: #776e65;
+    margin-bottom: 20px;
+}
+
+.grid-container {
+    background: #bbada0;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 15px;
+    background: #bbada0;
+    padding: 15px;
+    border-radius: 8px;
+    width: 500px;
+    height: 500px;
+}
+
+.tile {
+    background: #cdc1b4;
+    border-radius: 4px;
+    font-size: 36px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #776e65;
+    transition: all 0.15s ease;
+}
+
+/* Стили для плиток с числами */
+.tile-2 { background: #eee4da; }
+.tile-4 { background: #ede0c8; }
+.tile-8 { background: #f2b179; color: #f9f6f2; }
+.tile-16 { background: #f59563; color: #f9f6f2; }
+.tile-32 { background: #f67c5f; color: #f9f6f2; }
+.tile-64 { background: #f65e3b; color: #f9f6f2; }
+.tile-128 { background: #edcf72; color: #f9f6f2; font-size: 32px; }
+.tile-256 { background: #edcc61; color: #f9f6f2; font-size: 32px; }
+.tile-512 { background: #edc850; color: #f9f6f2; font-size: 32px; }
+.tile-1024 { background: #edc53f; color: #f9f6f2; font-size: 28px; }
+.tile-2048 { background: #edc22e; color: #f9f6f2; font-size: 28px; }
+.tile-4096 { background: #3c3a32; color: #f9f6f2; font-size: 28px; }
+.tile-8192 { background: #000000; color: #f9f6f2; font-size: 24px; }
+
+#new-game {
+    background: #8f7a66;
+    color: #f9f6f2;
+    border: none;
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#new-game:hover {
+    opacity: 0.9;
+}
